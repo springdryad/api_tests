@@ -43,7 +43,7 @@ public class JiraAPITests {
 
     Response deleteIssueResponse =
         given().
-            auth().preemptive().basic("webinar5", "webinar5").
+            auth().preemptive().basic("RuslanaChumachenko", "RuslanaChumachenko").
             contentType(ContentType.JSON).
             when().
             delete("https://jira.hillel.it/rest/api/2/issue/" + ticketId).
@@ -55,7 +55,7 @@ public class JiraAPITests {
     //Get deleted issue
     Response checkIfIssueDeletedResponse =
         given().
-            auth().preemptive().basic("webinar5", "webinar5").
+            auth().preemptive().basic("RuslanaChumachenko", "RuslanaChumachenko").
             contentType(ContentType.JSON).
             when().
             get("https://jira.hillel.it/rest/api/2/issue/" + ticketId).
