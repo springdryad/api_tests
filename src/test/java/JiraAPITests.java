@@ -2,6 +2,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import utils.JiraAPISteps;
 import utils.JiraJSONObjects;
 import utils.ResponseBuilder;
 
@@ -24,57 +25,18 @@ public class JiraAPITests {
 
   @Test
   public void createIssueResponse() {
-    Response createIssueResponse =
-        given().
-            auth().preemptive().basic("RuslanaChumachenko", "RuslanaChumachenko").
-            contentType(ContentType.JSON).
-            body(newIssue).
-            when().
-            post("https://jira.hillel.it/rest/api/2/issue").
-            then().
-            contentType(ContentType.JSON).
-            statusCode(201).
-            extract().response();
-    createIssueResponse.prettyPrint();
+    Response createIssueResponse = JiraAPISteps.createIssue(newIssue);
     ticketId = createIssueResponse.path("id");
-    System.out.println("Ticket ID: " + ticketId);
+    assertTrue(createIssueResponse.path("key").toString().contains("WEBINAR-"));
 
-    Response getIssueResponse =
-        given().
-            auth().preemptive().basic("RuslanaChumachenko", "RuslanaChumachenko").
-            contentType(ContentType.JSON).
-            when().
-            get("https://jira.hillel.it/rest/api/2/issue/" + ticketId).
-            then().
-            contentType(ContentType.JSON).
-            statusCode(200).
-            extract().response();
-    getIssueResponse.prettyPrint();
+    Response getIssueResponse = JiraAPISteps.getIssue(ticketId);
     assertEquals(getIssueResponse.path("fields.summary"), "API test summary");
     assertEquals(getIssueResponse.path("fields.creator.name"), "RuslanaChumachenko");
 
-
-    Response deleteIssueResponse =
-        given().
-            auth().preemptive().basic("RuslanaChumachenko", "RuslanaChumachenko").
-            contentType(ContentType.JSON).
-            when().
-            delete("https://jira.hillel.it/rest/api/2/issue/" + ticketId).
-            then().
-            statusCode(204).
-            extract().response();
-    deleteIssueResponse.print();
+    Response deleteIssueResponse = JiraAPISteps.deleteIssue(ticketId);
 
     //Get deleted issue
-    Response checkIfIssueDeletedResponse =
-        given().
-            auth().preemptive().basic("RuslanaChumachenko", "RuslanaChumachenko").
-            contentType(ContentType.JSON).
-            when().
-            get("https://jira.hillel.it/rest/api/2/issue/" + ticketId).
-            then().
-            statusCode(404).
-            extract().response();
+    Response checkIfIssueDeletedResponse = JiraAPISteps.checkIfIssueDeleted(ticketId);
   }
 
 
