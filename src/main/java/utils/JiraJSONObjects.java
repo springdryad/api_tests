@@ -1,3 +1,5 @@
+package utils;
+
 import org.json.simple.JSONObject;
 
 public class JiraJSONObjects {
@@ -21,5 +23,13 @@ public class JiraJSONObjects {
 
     newIssueJSON.put("fields", fields);
     return newIssueJSON.toJSONString();
+  }
+
+  public static String commentJSON(){
+    JSONObject commentJSON = new JSONObject();
+    JSONObject body = new JSONObject();
+    commentJSON.put("body", "test comment to be delete");
+
+    return commentJSON.toJSONString();
   }
 }
