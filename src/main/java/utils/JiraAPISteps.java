@@ -10,22 +10,22 @@ import static org.hamcrest.Matchers.lessThan;
 
 public class JiraAPISteps {
 
-  public static Response createIssue(String newIssue, String username, String password, String issueURL){
+  public static Response createIssue(String newIssue, String username, String password, String issueURL) {
     Response response =
         given().
-        auth().preemptive().basic(username, password).
-        contentType(ContentType.JSON).
-        body(newIssue).
-        when().
-        post(issueURL).
-        then().
-        contentType(ContentType.JSON).
-        statusCode(201).
-        extract().response();
+            auth().preemptive().basic(username, password).
+            contentType(ContentType.JSON).
+            body(newIssue).
+            when().
+            post(issueURL).
+            then().
+            contentType(ContentType.JSON).
+            statusCode(201).
+            extract().response();
     return response;
   }
 
-  public static Response getIssue(String ticketId, String username, String password, String issueURL){
+  public static Response getIssue(String ticketId, String username, String password, String issueURL) {
     Response response =
         given().
             auth().preemptive().basic(username, password).
@@ -39,7 +39,7 @@ public class JiraAPISteps {
     return response;
   }
 
-  public static Response deleteIssue(String ticketId, String username, String password, String issueURL){
+  public static Response deleteIssue(String ticketId, String username, String password, String issueURL) {
     Response response =
         given().
             auth().preemptive().basic(username, password).
@@ -52,7 +52,7 @@ public class JiraAPISteps {
     return response;
   }
 
-  public static Response checkIfIssueDeleted(String ticketId, String username, String password, String issueURL){
+  public static Response checkIfIssueDeleted(String ticketId, String username, String password, String issueURL) {
     Response response =
         given().
             auth().preemptive().basic(username, password).
@@ -65,7 +65,7 @@ public class JiraAPISteps {
     return response;
   }
 
-  public static Response addComment(String newComment, String username, String password, String issueURL, String ticketID){
+  public static Response addComment(String newComment, String username, String password, String issueURL, String ticketID) {
     Response response =
         given().
             auth().preemptive().basic(username, password).
@@ -81,7 +81,7 @@ public class JiraAPISteps {
     return response;
   }
 
-  public static Response deleteComment(String commentURL, String username, String password){
+  public static Response deleteComment(String commentURL, String username, String password) {
     Response response =
         given().
             auth().preemptive().basic(username, password).
@@ -92,7 +92,7 @@ public class JiraAPISteps {
     return response;
   }
 
-  public static Response getDeletedComment(String commentURL, String username, String password){
+  public static Response getDeletedComment(String commentURL, String username, String password) {
     Response response =
         given().
             auth().preemptive().basic(username, password).

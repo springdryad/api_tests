@@ -37,7 +37,7 @@ public class JiraAPITests {
   }
 
   @Test
-  public void addJiraComment(){
+  public void addJiraComment() {
     // create issue for addComment test
     Response createIssueResponse = JiraAPISteps.createIssue(newIssue, username, password, issueURL);
     ticketId = createIssueResponse.path("id");
