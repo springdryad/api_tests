@@ -1,15 +1,9 @@
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.JiraAPISteps;
 import utils.JiraJSONObjects;
-import utils.ResponseBuilder;
 
-import java.util.concurrent.TimeUnit;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.lessThan;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -17,72 +11,54 @@ import static org.testng.Assert.assertTrue;
 public class JiraAPITests {
   String username = "RuslanaChumachenko";
   String password = "RuslanaChumachenko";
+  String issueURL = "https://jira.hillel.it/rest/api/2/issue";
   String ticketId;
   String commentURL;
   String newIssue = JiraJSONObjects.newIssueJSON();
   String newComment = JiraJSONObjects.commentJSON();
-  public ResponseBuilder getDeletedCommentURL = new ResponseBuilder();
 
   @Test
-  public void createIssueResponse() {
-    Response createIssueResponse = JiraAPISteps.createIssue(newIssue);
+  public void createIssue() {
+    //create new issue
+    Response createIssueResponse = JiraAPISteps.createIssue(newIssue, username, password, issueURL);
     ticketId = createIssueResponse.path("id");
     assertTrue(createIssueResponse.path("key").toString().contains("WEBINAR-"));
 
-    Response getIssueResponse = JiraAPISteps.getIssue(ticketId);
+    //verify that issue contains summary and reporter sent in Json
+    Response getIssueResponse = JiraAPISteps.getIssue(ticketId, username, password, issueURL);
     assertEquals(getIssueResponse.path("fields.summary"), "API test summary");
     assertEquals(getIssueResponse.path("fields.creator.name"), "RuslanaChumachenko");
 
-    Response deleteIssueResponse = JiraAPISteps.deleteIssue(ticketId);
+    //delete issue
+    Response deleteIssueResponse = JiraAPISteps.deleteIssue(ticketId, username, password, issueURL);
 
-    //Get deleted issue
-    Response checkIfIssueDeletedResponse = JiraAPISteps.checkIfIssueDeleted(ticketId);
+    //get deleted issue
+    Response checkIfIssueDeletedResponse = JiraAPISteps.checkIfIssueDeleted(ticketId, username, password, issueURL);
   }
-
 
   @Test
   public void addJiraComment(){
-    Response addCommentResponse =
-        given().
-            auth().preemptive().basic("RuslanaChumachenko", "RuslanaChumachenko").
-            contentType(ContentType.JSON).
-            body(newComment).
-            when().
-            post("https://jira.hillel.it/rest/api/2/issue/WEBINAR-13256/comment").
-            then().
-            contentType(ContentType.JSON).
-            statusCode(201).
-            time(lessThan(4L), TimeUnit.SECONDS).
-            extract().response();
-    //System.out.println("Time is: " + addCommentResponse.time());
-    //assertTrue(addCommentResponse.time()<=1000);
+    // create issue for addComment test
+    Response createIssueResponse = JiraAPISteps.createIssue(newIssue, username, password, issueURL);
+    ticketId = createIssueResponse.path("id");
+
+    //add comment
+    Response addCommentResponse = JiraAPISteps.addComment(newComment, username, password, issueURL, ticketId);
     commentURL = addCommentResponse.path("self");
-    System.out.println("Comment URL: " + commentURL);
+    assertEquals(addCommentResponse.path("body"), "test comment to be delete");
 
-    Response deleteCommentResponse =
-        given().
-            auth().preemptive().basic("RuslanaChumachenko", "RuslanaChumachenko").
-            delete(commentURL).
-            then().
-            statusCode(204).
-            extract().response();
+    //delete comment
+    Response deleteCommentResponse = JiraAPISteps.deleteComment(commentURL, username, password);
 
-    Response getIssueResponse =
-        given().
-            auth().preemptive().basic("RuslanaChumachenko", "RuslanaChumachenko").
-            contentType(ContentType.JSON).
-            when().
-            get("https://jira.hillel.it/rest/api/2/issue/WEBINAR-13256").
-            then().
-            contentType(ContentType.JSON).
-            statusCode(200).
-            extract().response();
-    //getIssueResponse.prettyPrint();
+    //check if comment doesn't exist in the issue
+    Response getIssueResponse = JiraAPISteps.getIssue(ticketId, username, password, issueURL);
     Assert.assertFalse(getIssueResponse.toString().contains(commentURL));
 
+    //check if comment doesn't exist
+    Response getDeletedCommentURL = JiraAPISteps.getDeletedComment(commentURL, username, password);
 
-    getDeletedCommentURL.getDeletedComment(commentURL,username, password);
-
+    //delete the issue
+    Response deleteIssueResponse = JiraAPISteps.deleteIssue(ticketId, username, password, issueURL);
   }
 }
 
