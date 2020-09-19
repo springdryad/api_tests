@@ -9,56 +9,58 @@ import static org.testng.Assert.assertTrue;
 
 
 public class JiraAPITests {
-  String username = "RuslanaChumachenko";
-  String password = "RuslanaChumachenko";
-  String issueURL = "https://jira.hillel.it/rest/api/2/issue";
-  String ticketId;
-  String commentURL;
-  String newIssue = JiraJSONObjects.newIssueJSON();
-  String newComment = JiraJSONObjects.commentJSON();
+
 
   @Test
   public void createIssue() {
+
+    String ticketId;
+    String commentURL;
+
     //create new issue
-    Response createIssueResponse = JiraAPISteps.createIssue(newIssue, username, password, issueURL);
+    Response createIssueResponse = JiraAPISteps.createIssue();
     ticketId = createIssueResponse.path("id");
     assertTrue(createIssueResponse.path("key").toString().contains("WEBINAR-"));
 
     //verify that issue contains summary and reporter sent in Json
-    Response getIssueResponse = JiraAPISteps.getIssue(ticketId, username, password, issueURL);
+    Response getIssueResponse = JiraAPISteps.getIssue(ticketId);
     assertEquals(getIssueResponse.path("fields.summary"), "API test summary");
     assertEquals(getIssueResponse.path("fields.creator.name"), "RuslanaChumachenko");
 
     //delete issue
-    Response deleteIssueResponse = JiraAPISteps.deleteIssue(ticketId, username, password, issueURL);
+    Response deleteIssueResponse = JiraAPISteps.deleteIssue(ticketId);
 
     //get deleted issue
-    Response checkIfIssueDeletedResponse = JiraAPISteps.checkIfIssueDeleted(ticketId, username, password, issueURL);
+    Response checkIfIssueDeletedResponse = JiraAPISteps.checkIfIssueDeleted(ticketId);
   }
 
   @Test
   public void addJiraComment() {
+
+    String ticketId;
+    String commentURL;
+
     // create issue for addComment test
-    Response createIssueResponse = JiraAPISteps.createIssue(newIssue, username, password, issueURL);
+    Response createIssueResponse = JiraAPISteps.createIssue();
     ticketId = createIssueResponse.path("id");
 
     //add comment
-    Response addCommentResponse = JiraAPISteps.addComment(newComment, username, password, issueURL, ticketId);
+    Response addCommentResponse = JiraAPISteps.addComment(ticketId);
     commentURL = addCommentResponse.path("self");
     assertEquals(addCommentResponse.path("body"), "test comment to be delete");
 
     //delete comment
-    Response deleteCommentResponse = JiraAPISteps.deleteComment(commentURL, username, password);
+    Response deleteCommentResponse = JiraAPISteps.deleteComment(commentURL);
 
     //check if comment doesn't exist in the issue
-    Response getIssueResponse = JiraAPISteps.getIssue(ticketId, username, password, issueURL);
+    Response getIssueResponse = JiraAPISteps.getIssue(ticketId);
     Assert.assertFalse(getIssueResponse.toString().contains(commentURL));
 
     //check if comment doesn't exist
-    Response getDeletedCommentURL = JiraAPISteps.getDeletedComment(commentURL, username, password);
+    Response getDeletedCommentURL = JiraAPISteps.getDeletedComment(commentURL);
 
     //delete the issue
-    Response deleteIssueResponse = JiraAPISteps.deleteIssue(ticketId, username, password, issueURL);
+    Response deleteIssueResponse = JiraAPISteps.deleteIssue(ticketId);
   }
 }
 
