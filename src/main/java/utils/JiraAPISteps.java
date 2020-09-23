@@ -10,14 +10,17 @@ import static org.hamcrest.Matchers.lessThan;
 
 public class JiraAPISteps {
 
-  public static Response createIssue(String newIssue, String username, String password, String issueURL) {
+  static String newIssueJSON = JiraJSONObjects.newIssueJSON();
+  static String commentJSON = JiraJSONObjects.commentJSON();
+
+  public static Response createIssue() {
     Response response =
         given().
-            auth().preemptive().basic(username, password).
+            auth().preemptive().basic(Credentials.username, Credentials.password).
             contentType(ContentType.JSON).
-            body(newIssue).
+            body(newIssueJSON).
             when().
-            post(issueURL).
+            post(APIPathes.issue).
             then().
             contentType(ContentType.JSON).
             statusCode(201).
@@ -25,13 +28,13 @@ public class JiraAPISteps {
     return response;
   }
 
-  public static Response getIssue(String ticketId, String username, String password, String issueURL) {
+  public static Response getIssue(String ticketId) {
     Response response =
         given().
-            auth().preemptive().basic(username, password).
+            auth().preemptive().basic(Credentials.username, Credentials.password).
             contentType(ContentType.JSON).
             when().
-            get(issueURL + "/" + ticketId).
+            get(APIPathes.issue + ticketId).
             then().
             contentType(ContentType.JSON).
             statusCode(200).
@@ -39,52 +42,53 @@ public class JiraAPISteps {
     return response;
   }
 
-  public static Response deleteIssue(String ticketId, String username, String password, String issueURL) {
+  public static Response deleteIssue(String ticketId) {
     Response response =
         given().
-            auth().preemptive().basic(username, password).
+            auth().preemptive().basic(Credentials.username, Credentials.password).
             contentType(ContentType.JSON).
             when().
-            delete(issueURL + "/" + ticketId).
+            delete(APIPathes.issue + ticketId).
             then().
             statusCode(204).
             extract().response();
     return response;
   }
 
-  public static Response checkIfIssueDeleted(String ticketId, String username, String password, String issueURL) {
+  public static Response checkIfIssueDeleted(String ticketId) {
     Response response =
         given().
-            auth().preemptive().basic(username, password).
+            auth().preemptive().basic(Credentials.username, Credentials.password).
             contentType(ContentType.JSON).
             when().
-            get(issueURL + "/" + ticketId).
+            get(APIPathes.issue + ticketId).
             then().
             statusCode(404).
             extract().response();
     return response;
   }
 
-  public static Response addComment(String newComment, String username, String password, String issueURL, String ticketID) {
+  public static Response addComment(String ticketID) {
     Response response =
         given().
-            auth().preemptive().basic(username, password).
+            auth().preemptive().basic(Credentials.username, Credentials.password).
             contentType(ContentType.JSON).
-            body(newComment).
+            body(commentJSON).
             when().
-            post(issueURL + "/" + ticketID + "/comment").
+            post(String.format(APIPathes.comment, ticketID)).
             then().
-            contentType(ContentType.JSON).
             statusCode(201).
+            contentType(ContentType.JSON).
             time(lessThan(4L), TimeUnit.SECONDS).
             extract().response();
+    System.out.println(String.format(APIPathes.comment, ticketID));
     return response;
   }
 
-  public static Response deleteComment(String commentURL, String username, String password) {
+  public static Response deleteComment(String commentURL) {
     Response response =
         given().
-            auth().preemptive().basic(username, password).
+            auth().preemptive().basic(Credentials.username, Credentials.password).
             delete(commentURL).
             then().
             statusCode(204).
@@ -92,10 +96,10 @@ public class JiraAPISteps {
     return response;
   }
 
-  public static Response getDeletedComment(String commentURL, String username, String password) {
+  public static Response getDeletedComment(String commentURL) {
     Response response =
         given().
-            auth().preemptive().basic(username, password).
+            auth().preemptive().basic(Credentials.username, Credentials.password).
             contentType(ContentType.JSON).
             when().
             get(commentURL).

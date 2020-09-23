@@ -25,7 +25,7 @@ public class JiraJSONObjects {
     return newIssueJSON.toJSONString();
   }
 
-  public static String commentJSON(){
+  public static String commentJSON() {
     JSONObject commentJSON = new JSONObject();
     JSONObject body = new JSONObject();
     commentJSON.put("body", "test comment to be delete");
