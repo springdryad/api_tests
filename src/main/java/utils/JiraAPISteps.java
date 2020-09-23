@@ -81,7 +81,6 @@ public class JiraAPISteps {
             contentType(ContentType.JSON).
             time(lessThan(4L), TimeUnit.SECONDS).
             extract().response();
-    System.out.println(String.format(APIPathes.comment, ticketID));
     return response;
   }
 
