@@ -2,20 +2,16 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.JiraAPISteps;
-import utils.JiraJSONObjects;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-
 public class JiraAPITests {
-
 
   @Test
   public void createIssue() {
 
     String ticketId;
-    String commentURL;
 
     //create new issue
     Response createIssueResponse = JiraAPISteps.createIssue();
