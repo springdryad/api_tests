@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Jira Tests Suite" parallel="false">
+
+    <test name="TestCases">
+        <parameter name="browserName" value="chrome"/>
+
+        <classes>
+            <class name="JiraAPITests"/>
+        </classes>
+    </test>
+
+</suite>
