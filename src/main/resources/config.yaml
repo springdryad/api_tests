@@ -1,7 +1,8 @@
-author: Franc
-database:
-  driver: com.mysql.jdbc.Driver
-  port: 3306
-  dbname: mydb
-  username: root
-  password:
+environments:
+  dev: "https://dev.jira.hillel.it"
+  staging: "https://staging.jira.hillel.it"
+
+timeout:
+  slow: 10
+  fast: 3
+

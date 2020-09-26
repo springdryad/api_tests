@@ -1,6 +1,6 @@
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.yaml.snakeyaml.Yaml;
-//import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +19,6 @@ public class Main {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
-    //ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
 
   }
 }
