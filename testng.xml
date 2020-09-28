@@ -6,8 +6,8 @@
             <class name="JiraAPITests"/>
         </classes>
     </test>
-    <listeners>
-        <listener class-name="utils.TestNGListener"/>
-    </listeners>
+<!--    <listeners>-->
+<!--        <listener class-name="utils.TestNGListener"/>-->
+<!--    </listeners>-->
 
 </suite>
