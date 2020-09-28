@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8u222-stretch-browsers
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: run tests
+          command: |
+            mvn clean test
+      - store_artifacts:
+          path: screenshots
+          destination: test-reports
+          when: always
