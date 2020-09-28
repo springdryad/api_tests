@@ -9,8 +9,6 @@ public class TestNGListener implements ITestListener {
   @Override
   public void onStart(ITestContext context) {
 
-    String baseURL = null;
-
   }
 
   @Override
