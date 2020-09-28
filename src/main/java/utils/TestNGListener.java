@@ -9,7 +9,7 @@ public class TestNGListener implements ITestListener {
   @Override
   public void onStart(ITestContext context) {
 
-    String baseURL = null;
+    String baseURL = YamlReader.getEnvironment(System.getenv("environment"));
 
   }
 
