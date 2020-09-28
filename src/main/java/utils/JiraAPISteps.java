@@ -20,7 +20,7 @@ public class JiraAPISteps {
             contentType(ContentType.JSON).
             body(newIssueJSON).
             when().
-            post(APIPathes.issue).
+            post(APIPathes.issueURL()).
             then().
             contentType(ContentType.JSON).
             statusCode(201).
@@ -34,7 +34,7 @@ public class JiraAPISteps {
             auth().preemptive().basic(Credentials.username, Credentials.password).
             contentType(ContentType.JSON).
             when().
-            get(APIPathes.issue + ticketId).
+            get(APIPathes.issueURL() + ticketId).
             then().
             contentType(ContentType.JSON).
             statusCode(200).
@@ -48,7 +48,7 @@ public class JiraAPISteps {
             auth().preemptive().basic(Credentials.username, Credentials.password).
             contentType(ContentType.JSON).
             when().
-            delete(APIPathes.issue + ticketId).
+            delete(APIPathes.issueURL() + ticketId).
             then().
             statusCode(204).
             extract().response();
@@ -61,7 +61,7 @@ public class JiraAPISteps {
             auth().preemptive().basic(Credentials.username, Credentials.password).
             contentType(ContentType.JSON).
             when().
-            get(APIPathes.issue + ticketId).
+            get(APIPathes.issueURL() + ticketId).
             then().
             statusCode(404).
             extract().response();
@@ -75,7 +75,7 @@ public class JiraAPISteps {
             contentType(ContentType.JSON).
             body(commentJSON).
             when().
-            post(String.format(APIPathes.comment, ticketID)).
+            post(String.format(APIPathes.commentURL(), ticketID)).
             then().
             statusCode(201).
             contentType(ContentType.JSON).
