@@ -1,6 +1,6 @@
 environments:
   dev: "https://dev.jira.hillel.it"
-  staging: "https://staging.jira.hillel.it"
+  staging: "https://jira.hillel.it"
 
 timeout:
   slow: 10
