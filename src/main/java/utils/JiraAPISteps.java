@@ -1,5 +1,6 @@
 package utils;
 
+import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -13,6 +14,7 @@ public class JiraAPISteps {
   static String newIssueJSON = JiraJSONObjects.newIssueJSON();
   static String commentJSON = JiraJSONObjects.commentJSON();
 
+  @Step("Create issue")
   public static Response createIssue() {
     Response response =
         given().
@@ -28,6 +30,7 @@ public class JiraAPISteps {
     return response;
   }
 
+  @Step("Get issue")
   public static Response getIssue(String ticketId) {
     Response response =
         given().
@@ -42,6 +45,7 @@ public class JiraAPISteps {
     return response;
   }
 
+  @Step("Delete issue")
   public static Response deleteIssue(String ticketId) {
     Response response =
         given().
@@ -55,6 +59,7 @@ public class JiraAPISteps {
     return response;
   }
 
+  @Step("Get deleted issue")
   public static Response checkIfIssueDeleted(String ticketId) {
     Response response =
         given().
@@ -68,6 +73,7 @@ public class JiraAPISteps {
     return response;
   }
 
+  @Step("Add comment")
   public static Response addComment(String ticketID) {
     Response response =
         given().
@@ -84,6 +90,7 @@ public class JiraAPISteps {
     return response;
   }
 
+  @Step("Delete comment")
   public static Response deleteComment(String commentURL) {
     Response response =
         given().
@@ -95,6 +102,7 @@ public class JiraAPISteps {
     return response;
   }
 
+  @Step("Get deleted comment")
   public static Response getDeletedComment(String commentURL) {
     Response response =
         given().
